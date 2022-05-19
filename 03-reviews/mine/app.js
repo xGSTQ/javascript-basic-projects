@@ -29,17 +29,18 @@ const reviews = [{
   },
 ];
 
-
+// Declerations
 const btns = document.querySelectorAll('button');
 
-let card = 0;
+let cardIndex = 0;
 
 const imageEl = document.getElementById('person-img'),
-      authorEl = document.getElementById('author'),
-      jobEl = document.getElementById('job'),
-      infoEl = document.getElementById('info');
+  authorEl = document.getElementById('author'),
+  jobEl = document.getElementById('job'),
+  infoEl = document.getElementById('info');
 
 
+// Update the card, passing in required 
 const updateCard = (image, author, job, info) => {
   imageEl.src = image;
   authorEl.textContent = author;
@@ -47,21 +48,45 @@ const updateCard = (image, author, job, info) => {
   infoEl.textContent = info;
 }
 
+// Random number generator between two numbers and never the same
+let lastNumber // start with undefined lastNumber
 
-btns.forEach(function (btn) {
-  btn.addEventListener("click", function (thisButton) {
-    const styles = thisButton.currentTarget.classList;
-    if (styles.contains("next-btn")) {
+let getRandNumber = () => {
+  let x = Math.floor((Math.random() * reviews.length)); // get new random number
 
-      // TODO loop over the numbers in reviews
-    updateCard(reviews[0].img, reviews[0].name, reviews[0].job ,reviews[0].text)
+  if (x === lastNumber) { // compare with last number
+    return getRandNumber() // if they are the same, call the function again to repeat the process
+  }
+  return x // if they're not the same, return it
+}
 
-    } else if (styles.contains("prev-btn")) {
-      console.log(styles);
+// Listen to the next, prev & random buttons  
+  btns.forEach(function (btn) { // Grab all buttons and addEventListener for each and use each button with thisButton
+    btn.addEventListener("click", (thisButton) => {
+      const styles = thisButton.currentTarget.classList;
+      if (styles.contains("next-btn")) {
+        // Move cardIndex Forwards
+        if (cardIndex === reviews.length) {
+          cardIndex = 0;
+        }
+        reviewPosition = cardIndex++;
+        updateCard(reviews[reviewPosition].img, reviews[reviewPosition].name, reviews[reviewPosition].job, reviews[reviewPosition].text);
 
-    } else if (styles.contains("random-btn")) {
-      console.log(styles);
 
-    }
-  })
-});
+      } else if (styles.contains("prev-btn")) {
+        // Move cardIndex Backwards
+        reviewPosition = cardIndex--;
+        if (cardIndex === -1) {
+          cardIndex = reviews.length - 1
+        }
+        updateCard(reviews[reviewPosition].img, reviews[reviewPosition].name, reviews[reviewPosition].job, reviews[reviewPosition].text);
+
+
+      } else if (styles.contains("random-btn")) {
+        // Generate random number 
+        let reviewPosition = getRandNumber()
+        lastNumber = reviewPosition;
+        updateCard(reviews[reviewPosition].img, reviews[reviewPosition].name, reviews[reviewPosition].job, reviews[reviewPosition].text);
+      }
+    })
+  });
