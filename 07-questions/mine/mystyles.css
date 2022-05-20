@@ -1,0 +1,59 @@
+body {
+    margin-top: 80px;
+}
+
+section.faq {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.faq--content {
+    width: 620px;
+}
+
+.faq--header {
+    font-family: "Great Vibes", cursive;
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+article.faq--article {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 24px;
+}
+
+article .faq--article-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+article .faq--expand-link {
+    cursor: pointer;
+}
+
+article .faq--article-header i {
+    font-size: 1.6rem;
+}
+
+article .faq--article-reveal {
+    opacity: 0;
+    margin-top: 24px;
+    display: none;
+}
+
+article.faq--article hr {
+    border-top: 1px solid lightgrey;
+    border-bottom: none;
+    border-radius: 5px;
+    margin-bottom: 12px;
+}
+
+.article-fadeIn {
+    visibility: visible;
+    opacity: 1 !important;
+    display: block !important;
+    transition: visibility 0s linear 0s, opacity 300ms;
+}
