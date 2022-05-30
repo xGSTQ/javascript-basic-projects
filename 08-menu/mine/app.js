@@ -72,34 +72,68 @@ const menu = [{
   },
 ];
 
-
 // Declerations
 const sectionCenterEl = document.querySelector('.section-center');
+const filterBtnsEl = document.querySelectorAll('.filter-btn');
 
 // Wait for the dom to load with DOMContentLoaded event listener on the 
-// window and then use a call back function to map the object array
+// window and then use a call back function to map the object array 
+// (need to wait for the dom before rendering the articles)
 window.addEventListener('DOMContentLoaded', () => {
-  console.log('dom is now loaded');
-  let displayTheArticles = menu.map( singleItem => {
+  // console.log('dom is now loaded');
 
-    // Map an article item using template literals
-    articleItem =
-      `<article class="menu-item">
-        <img src="${singleItem.img}" alt="menu item" class="photo" />
-        <div class="item-info">
-          <header>
-            <h4>${singleItem.title}</h4>
-            <h4 class="price">${singleItem.price}</h4>
-          </header>
-          <p class="item-text">${singleItem.desc}</p>
-        </div>
-      </article>`;
-
-    return articleItem;
-
-    // Join the articles map back together
-  }).join('\n');
-
-  // render the articles
-  sectionCenterEl.innerHTML = displayTheArticles
+  // Call the Articles function passing in the menu array
+  displayArticleItems(menu)
 });
+
+
+
+// Filter items
+// query all buttons and then use the foreach to add a function on each button
+// add an EventListener to each button and listen to each (e (event))
+// use event.currentTarget to capture button clicked 
+filterBtnsEl.forEach(function (btn) {
+  btn.addEventListener('click', function (e) {
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset
+    // Using the dataset property to get the category from the buttons clicked
+    const category = e.currentTarget.dataset.id;
+
+    // create a filter array from the menu array
+    const menuCategory = menu.filter(function (menuItem) {
+      if(menuItem.category === category) {
+        return menuItem;
+      }
+      console.log(menuItem)
+    });
+    // console.log(menuItem.category);
+
+  })
+})
+
+
+
+
+
+//Display the Article function
+let displayArticleItems = (eachArticle) => {
+
+  let mapTheArticles = eachArticle.map( item => {
+
+    // return the article item using template literals
+    return `<article class="menu-item">
+              <img src="${item.img}" alt="${item.title}" title="${item.title}" class="photo" />
+              <div class="item-info">
+                <header>
+                  <h4>${item.title}</h4>
+                  <h4 class="price">$${item.price}</h4>
+                </header>
+                <p class="item-text">${item.desc}</p>
+              </div>
+            </article>`;   
+  });
+
+  // Join the article map back together
+  mapTheArticles = mapTheArticles.join('\n');
+  // Render the articles
+  sectionCenterEl.innerHTML = mapTheArticles
+}
