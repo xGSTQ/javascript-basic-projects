@@ -70,11 +70,20 @@ const menu = [{
     img: "./images/item-9.jpeg",
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`
   },
+  {
+    id: 10,
+    title: "bison steak",
+    category: "dinner",
+    price: 22.99,
+    img: "./images/item-10.jpeg",
+    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`
+  }
 ];
 
 // Declerations
 const sectionCenterEl = document.querySelector('.section-center');
-const filterBtnsEl = document.querySelectorAll('.filter-btn');
+const btnContainerEl = document.querySelector('.btn-container');
+
 
 // Wait for the dom to load with DOMContentLoaded event listener on the 
 // window and then use a call back function to map the object array 
@@ -83,41 +92,17 @@ window.addEventListener('DOMContentLoaded', () => {
   // console.log('dom is now loaded');
 
   // Call the Articles function passing in the menu array
-  displayArticleItems(menu)
+  displayArticleItems(menu);
+
+  displayMenuButtons();
 });
 
 
 
-// Filter items
-// query all buttons and then use the foreach to add a function on each button
-// add an EventListener to each button and listen to each (e (event))
-// use event.currentTarget to capture button clicked 
-filterBtnsEl.forEach(function (btn) {
-  btn.addEventListener('click', function (e) {
-    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset
-    // Using the dataset property to get the category from the buttons clicked
-    const category = e.currentTarget.dataset.id;
-
-    // create a filter array from the menu array
-    const menuCategory = menu.filter(function (menuItem) {
-      if(menuItem.category === category) {
-        return menuItem;
-      }
-      console.log(menuItem)
-    });
-    // console.log(menuItem.category);
-
-  })
-})
-
-
-
-
-
-//Display the Article function
+// Display the Items function
 let displayArticleItems = (eachArticle) => {
 
-  let mapTheArticles = eachArticle.map( item => {
+  let mapTheArticles = eachArticle.map(item => {
 
     // return the article item using template literals
     return `<article class="menu-item">
@@ -129,11 +114,69 @@ let displayArticleItems = (eachArticle) => {
                 </header>
                 <p class="item-text">${item.desc}</p>
               </div>
-            </article>`;   
+            </article>`;
   });
 
   // Join the article map back together
   mapTheArticles = mapTheArticles.join('\n');
   // Render the articles
   sectionCenterEl.innerHTML = mapTheArticles
+};
+
+// Display the buttons function
+let displayMenuButtons = () => {
+// Map the categories
+const categories = menu.map(function (item) {
+  return item.category;
+});
+// Remove the duplicate categores
+let uniqueCategories = [...new Set(categories)];
+// unshift the all btn
+uniqueCategories.unshift('all')
+
+// Map the final buttons
+let categoryBtns = uniqueCategories.map(function (eachBtn) {
+  return `<button type="button" class="filter-btn" data-id="${eachBtn}">${eachBtn}</button>`
+}).join('\n');
+
+// Render the buttons
+btnContainerEl.innerHTML = categoryBtns;
+
+
+// Declare all the buttons after they have been mapped
+const filterBtnsEl = document.querySelectorAll('.filter-btn');
+// console.log(filterBtnsEl)
+
+
+// Filter the items to display by button click
+// find all buttons and then use the foreach to add a function on each button
+// add an EventListener to each button and listen to each (e (event))
+// use event.currentTarget to capture button clicked 
+filterBtnsEl.forEach(function (btn) {
+  btn.addEventListener('click', function (e) {
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset
+    // Using the dataset property to get the category from the buttons clicked
+    const category = e.currentTarget.dataset.id;
+
+    // create a filtered array from the menu array
+    const menuCategory = menu.filter(function (menuItem) {
+      // console.log(menuItem.category);
+      // Filter the array based on the button clicked (data-id)
+      if (menuItem.category === category) {
+        return menuItem;
+      }
+    });
+    // retrun the oriingal menu array if the button data-id is 'all'
+    if (category === 'all') {
+      displayArticleItems(menu)
+    } else {
+      // return the filtered array
+      displayArticleItems(menuCategory)
+    }
+  });
+});
+
+
 }
+
+
