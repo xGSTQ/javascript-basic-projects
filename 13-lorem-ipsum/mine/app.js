@@ -27,7 +27,7 @@ form.addEventListener('submit', (e) => {
   let randomNumber = Math.floor(Math.random() * text.length);
 
   // If value is NaN or less than 0 or more than 9 generate a random paragraph from the array
-  if (isNaN(value) || value < 0 || value > 9) {
+  if (isNaN(value) || value <= 0 || value > 9) {
     result.innerHTML = `<p class="result">${text[randomNumber]}</p>`;
   } else {
     // clear any previous results first
